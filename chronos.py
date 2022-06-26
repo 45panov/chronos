@@ -1,72 +1,74 @@
-#!/usr/bin/env python3
 import os
 import time
-from os.path import expanduser
+import json
+
 
 default_user = 'tihonasiy'
-default_time = '7200'
-current_date_f = expanduser('~') + '/chronos/current_date.txt'
-remaining_time_f = expanduser('~') + '/chronos/remaining_time.txt'
-
-with open(current_date_f, encoding='utf-8') as f: # read last date from file
-                                                  # to compare it with current one                                               
-    last_date =  f.readline()
-    last_date = last_date.strip()
-    last_date  = last_date.split(' ')
-    last_date = [int(elem) for elem in last_date] # create list of year, mounth and day elements as integers
+default_time = 20
+date_time_file = os.path.expanduser('~') + '/chronos/date_time.json'
 
 
-current_date = time.struct_time(time.localtime(time.time())) # get current date 
+def timer():
+	
+	# Reads remaining time from date_time.json and decreases
+	# its value in each iterration.
+
+	with open(date_time_file, mode='r', encoding='utf-8') as f:
+
+		json_entry = json.load(f)
 
 
+	while json_entry['remaining_time'] > 0:
 
-def timer(): # reads remaining time from file and update in with decreased value on each iterration
-    
-    with open(remaining_time_f, encoding='utf-8') as f: # read remaining time from file
-                                                            # to count it down
-            remaining_time = int(f.readline())
+		with open(date_time_file, mode='w', encoding='utf-8') as f:
 
-        
-    while (remaining_time) > 0:   # run time counter and write its values into file on each iteration
+			json_entry['remaining_time'] -= 1
 
-        with open(remaining_time_f, mode='w',  encoding='utf-8') as f:   
-        
-            remaining_time -= 1
-            
-            f.write(str(remaining_time))
+			json.dump(json_entry, f)
 
-            f.flush()
+			time.sleep(1)
 
-            time.sleep(1)
-
-
-
+		
 def reset_date_and_timer():
 
-    with open(current_date_f, mode='w', encoding='utf-8') as f:  # update current date in current_date.txt
+	# Updates current date in date_time.json
 
-        for i in range(0, 3, 1):
+	with open(date_time_file, mode='w', encoding='utf-8') as f:
 
-            f.write(str(current_date[i]) + ' ')
-
-    with open(remaining_time_f, mode='w',  encoding='utf-8') as f:  # update play time for new day 
-        
-        f.write(str(default_time))
-
-
-
-# MAIN PART STARTS HERE
-
-if last_date[0] == current_date[0] and last_date[1] == current_date[1] and last_date[2] == current_date[2]:   #if last saved date equal to current one
- 
-    timer() # runs timer count down
+        	json_entry = {'current_date': time.strftime('%Y%m%d', time.gmtime()),
+                              'remaining_time': default_time}
     
-    os.system('pkill -KILL -u {0}'.format(default_user))  # logout when time is over
+        	json.dump(json_entry, f)
 
-else:  #if last saved date isn't equal to current one
 
-    reset_date_and_timer() # update play time for new day
 
-    timer()  # runs timer count down
+# Main part starts below.
 
-    os.system('pkill -KILL -u {0}'.format(default_user))  # logout when time is over
+
+if os.path.exists(date_time_file) == False: # Creates file with date and time if it doesn't exist.
+
+	reset_date_and_timer()
+
+else: #read data from date_time_file
+
+	with open(date_time_file, mode='r', encoding='utf-8') as f:
+
+        	json_entry = json.load(f)
+
+
+
+if json_entry['current_date'] == time.strftime('%Y%m%d', time.gmtime()):  #compare last saved and current dates
+
+    timer()
+
+    os.system('pkill -KILL -u {0}'.format(default_user))
+    
+
+else:
+
+    reset_date_and_timer()
+
+    timer()
+    
+    os.system('pkill -KILL -u {0}'.format(default_user))
+
