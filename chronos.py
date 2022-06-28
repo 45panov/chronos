@@ -4,7 +4,7 @@ import json
 
 
 default_user = 'tihonasiy'
-default_time = 20
+default_time = 7200
 date_time_file = os.path.expanduser('~') + '/chronos/date_time.json'
 
 
@@ -13,32 +13,31 @@ def timer():
 	# Reads remaining time from date_time.json and decreases
 	# its value in each iterration.
 
-	with open(date_time_file, mode='r', encoding='utf-8') as f:
+    with open(date_time_file, mode='r', encoding='utf-8') as f:
 
-		json_entry = json.load(f)
+        json_entry = json.load(f)
 
+    
+    while json_entry['remaining_time'] > 0:
+        
+        with open(date_time_file, mode='w', encoding='utf-8') as f:
+            
+            json_entry['remaining_time'] -= 1
 
-	while json_entry['remaining_time'] > 0:
+            json.dump(json_entry, f)
 
-		with open(date_time_file, mode='w', encoding='utf-8') as f:
-
-			json_entry['remaining_time'] -= 1
-
-			json.dump(json_entry, f)
-
-			time.sleep(1)
-
+            time.sleep(1)
 		
 def reset_date_and_timer():
 
 	# Updates current date in date_time.json
 
-	with open(date_time_file, mode='w', encoding='utf-8') as f:
+    with open(date_time_file, mode='w', encoding='utf-8') as f:
 
-        	json_entry = {'current_date': time.strftime('%Y%m%d', time.gmtime()),
-                              'remaining_time': default_time}
+        json_entry = {'current_date': time.strftime('%Y%m%d', time.gmtime()),
+                      'remaining_time': default_time}
     
-        	json.dump(json_entry, f)
+        json.dump(json_entry, f)
 
 
 
@@ -47,13 +46,19 @@ def reset_date_and_timer():
 
 if os.path.exists(date_time_file) == False: # Creates file with date and time if it doesn't exist.
 
-	reset_date_and_timer()
+    reset_date_and_timer()
+        
+    with open(date_time_file, mode='r', encoding='utf-8') as f:
+
+        json_entry = json.load(f)
+
+
 
 else: #read data from date_time_file
 
-	with open(date_time_file, mode='r', encoding='utf-8') as f:
+    with open(date_time_file, mode='r', encoding='utf-8') as f:
 
-        	json_entry = json.load(f)
+        json_entry = json.load(f)
 
 
 
@@ -71,4 +76,5 @@ else:
     timer()
     
     os.system('pkill -KILL -u {0}'.format(default_user))
+    
 
