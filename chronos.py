@@ -9,7 +9,7 @@ date_time_file = os.path.expanduser('~') + '/chronos/date_time.json'
 
 
 def timer():
-	
+
 	# Reads remaining time from date_time.json and decreases
 	# its value in each iterration.
 
@@ -26,6 +26,8 @@ def timer():
 
             json.dump(json_entry, f)
 
+            f.flush()
+
             time.sleep(1)
 		
 def reset_date_and_timer():
@@ -38,6 +40,8 @@ def reset_date_and_timer():
                       'remaining_time': default_time}
     
         json.dump(json_entry, f)
+
+        f.flush()
 
 
 
@@ -76,5 +80,3 @@ else:
     timer()
     
     os.system('pkill -KILL -u {0}'.format(default_user))
-    
-
