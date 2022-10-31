@@ -49,7 +49,7 @@ def reset_date_and_timer():
 # Main part starts below.
 
 
-if os.path.exists(date_time_file) == False or os.stat(date_time_file).st_size == 0:
+if not os.path.exists(date_time_file) or os.stat(date_time_file).st_size == 0:
 
     # Creates file with date and time if it doesn't exist or empty.
 
