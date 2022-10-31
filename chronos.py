@@ -82,4 +82,4 @@ else:
 
     timer()
 
-    os.system("pkill -KILL -u {0}".format(default_user))
+    os.system(f"pkill -KILL -u {default_user}")
