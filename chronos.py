@@ -73,8 +73,7 @@ if json_entry["current_date"] == time.strftime("%Y%m%d", time.gmtime()):
 
     timer()
 
-    os.system("pkill -KILL -u {0}".format(default_user))
-
+    os.system(f"pkill -KILL -u {default_user}")
 
 else:
 
