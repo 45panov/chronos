@@ -1,84 +1,17 @@
 import os
-import time
-import json
 
 
-default_user = "tihonasiy"
-default_time = 7200
-date_time_file = os.path.expanduser("~") + "/chronos/date_time.json"
+class System:
+    LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
+                       'nt': "shutdown -l"}
+
+    @classmethod
+    def logout_command(cls):
+        return cls.LOGOUT_COMMANDS[os.name]
 
 
-def timer():
+class Chronos:
+    def logout():
+        return "os.system(System().logout_command())" # Change to os.system(System().logout_command())
 
-    # Reads remaining time from date_time.json and decreases
-    # its value in each iterration.
-
-    with open(date_time_file, mode="r", encoding="utf-8") as f:
-
-        json_entry = json.load(f)
-
-    while json_entry["remaining_time"] > 0:
-
-        with open(date_time_file, mode="w", encoding="utf-8") as f:
-
-            json_entry["remaining_time"] -= 1
-
-            json.dump(json_entry, f)
-
-            f.flush()
-
-            time.sleep(1)
-
-
-def reset_date_and_timer():
-
-    # Updates current date in date_time.json
-
-    with open(date_time_file, mode="w", encoding="utf-8") as f:
-
-        json_entry = {
-            "current_date": time.strftime("%Y%m%d", time.gmtime()),
-            "remaining_time": default_time,
-        }
-
-        json.dump(json_entry, f)
-
-        f.flush()
-
-
-# Main part starts below.
-
-
-if not os.path.exists(date_time_file) or os.stat(date_time_file).st_size == 0:
-
-    # Creates file with date and time if it doesn't exist or empty.
-
-    reset_date_and_timer()
-
-    with open(date_time_file, mode="r", encoding="utf-8") as f:
-
-        json_entry = json.load(f)
-
-
-else:  # Reads data from date_time_file.
-
-    with open(date_time_file, mode="r", encoding="utf-8") as f:
-
-        json_entry = json.load(f)
-
-
-if json_entry["current_date"] == time.strftime("%Y%m%d", time.gmtime()):
-
-    # Compare last saved and current dates.
-
-    timer()
-
-    os.system(f"pkill -KILL -u {default_user}")
-
-else:
-
-    reset_date_and_timer()
-
-    timer()
-
-    os.system(f"pkill -KILL -u {default_user}")
+print(Chronos.logout())

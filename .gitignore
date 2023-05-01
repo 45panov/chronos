@@ -1,4 +1,4 @@
-gh_token.txt
 date_time.json
-chronos.py.swp
-chronos.py.swn
+.idea
+.pytest_cache
+__pycache__
