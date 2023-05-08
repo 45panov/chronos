@@ -10,6 +10,7 @@ def test_timer_zero():
     assert Chronos.logout(timer) == "os.system(System().logout_command())", "Chronos must logout on Timer(0)"
 
 def test_timer_run():
-    timer = Timer(1)
+    timer = System().set_timer(1)
     timer.run()
     assert Chronos.logout(timer) == "os.system(System().logout_command())", "Chronos must logout on Timer(0)"
+

@@ -5,6 +5,7 @@ from chronos import *
 
 def test_imports():
     assert 'os' in globals(), "os must be in globals"
+    assert 'time' in globals(), "time must be in globals"
 
 def test_logout_commands():
     assert System.logout_command() == "shutdown -l"
