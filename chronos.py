@@ -14,6 +14,9 @@ class Timer:
     def __init__(self, seconds: int):
         self.remain = seconds
 
+    def run(self):
+        self.remain -= 1
+
 class Chronos:
     def logout(timer: Timer): # Runs logout command
         if not timer.remain:
