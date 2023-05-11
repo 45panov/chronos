@@ -5,12 +5,13 @@ class System:
     LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",  # Keeps logout commands for different OS
                        'nt': "shutdown -l"}
 
-    @classmethod
-    def logout_command(cls):  # Gets logout command for particular OS
-        return cls.LOGOUT_COMMANDS[os.name]
-
     def set_timer(self, seconds):
         return Timer(seconds)
+    
+    @classmethod
+    def logout(cls):
+        return "os.system(" + cls.LOGOUT_COMMANDS[os.name] + ")"
+       
 
 class Timer:
     def __init__(self, seconds: int):
@@ -26,6 +27,3 @@ class Chronos:
             return "os.system(System().logout_command())"  # Change to os.system(System().logout_command()
 
 
-timer = Timer(1)
-timer.run()
-print(Chronos.logout(timer))
