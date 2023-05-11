@@ -7,7 +7,7 @@ class System:
 
     def set_timer(self, seconds):
         return Timer(seconds)
-    
+
     @classmethod
     def logout(cls):
         return "os.system(" + cls.LOGOUT_COMMANDS[os.name] + ")"
@@ -15,15 +15,18 @@ class System:
 
 class Timer:
     def __init__(self, seconds: int):
+        self.is_run = False
         self.remain = seconds
 
-    def run(self):
-        self.remain -= 1
 
 
 class Chronos:
-    def logout(timer: Timer):  # Runs logout command
-        if not timer.remain:
-            return "os.system(System().logout_command())"  # Change to os.system(System().logout_command()
+    def run(timer: Timer):
+        timer.is_run = True
+        while timer.remain > 0:
+            timer.remain -= 1
+        timer.is_run = False
+        return timer
+
 
 

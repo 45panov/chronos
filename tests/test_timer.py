@@ -1,16 +1,23 @@
 from chronos import *
 
-def test_not_logout_on_timer_remain_1():
+def test_timer_1():
     timer = Timer(1)
-    assert not Chronos.logout(timer) == "os.system(System().logout_command())", "Chronos.logout(timer) must be NOT equal" \
-                                                                                "to os.system(System().logout_command())"
+    assert timer.remain == 1
 
-def test_timer_zero():
+
+def test_chronos_reduces_timer():
+    timer = Timer(2)
+    Chronos.run(timer)
+    assert timer.is_run == False, "timer.is_run must be False after Chronos has reduced it to 0"
+
+def test_timer_is_0():
     timer = Timer(0)
-    assert Chronos.logout(timer) == "os.system(System().logout_command())", "Chronos must logout on Timer(0)"
+    Chronos.run(timer)
+    assert timer.is_run == False, 'timer.is_run must be False if Timer(0)'
 
-def test_timer_run():
-    timer = System().set_timer(1)
-    timer.run()
-    assert Chronos.logout(timer) == "os.system(System().logout_command())", "Chronos must logout on Timer(0)"
+
+
+
+
+
 

@@ -5,5 +5,9 @@ def test_system_return_timer():
     assert timer.remain == Timer(1).remain, "System().set_timer() must return Timer object"
 
 def test_system_performs_logout():
-    assert System().logout() == "os.system(" + System().logout_command() + ")"
+    assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
+
+def test_system_get_time():
+    System.get_time()
+
 
