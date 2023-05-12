@@ -3,3 +3,5 @@ date_time.json
 .pytest_cache
 __pycache__
 venv
+.ipynb_checkpoints
+.python-version
