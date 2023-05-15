@@ -27,6 +27,3 @@ class Chronos:
             timer.remain -= 1
         timer.is_run = False
         return timer
-
-
-
