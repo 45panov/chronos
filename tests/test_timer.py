@@ -10,12 +10,19 @@ def test_chronos_reduces_timer():
     Chronos.run(timer)
     assert timer.is_run == False, "timer.is_run must be False after Chronos has reduced it to 0"
 
+
 def test_timer_is_0():
     timer = Timer(0)
     Chronos.run(timer)
     assert timer.is_run == False, 'timer.is_run must be False if Timer(0)'
 
 
+def test_logout_on_timer_is_0():
+    j_data = JData()
+    timer = System().set_timer(j_data.time_remain)
+    Chronos.run(System().set_timer(10))
+    logout = System.logout()
+    assert logout == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 
 
 

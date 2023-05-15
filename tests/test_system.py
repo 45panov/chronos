@@ -1,20 +1,17 @@
 from chronos import *
 
 def test_system_return_timer():
-    timer = System().set_timer(1)
-    assert timer.remain == Timer(1).remain, "System().set_timer() must return Timer object"
+    j_data = JData().read()
+    timer = System().set_timer(j_data.time_remain)
+    assert timer.remain == Timer(10).remain, "System().set_timer() must return Timer object"
 
 def test_system_performs_logout():
     assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 
-def test_system_get_time():
-    file_data = {'current_date': '20230511',
-                 'remaining_time': 10}
+<<<<<<< HEAD
 
-    timer = System().set_timer(file_data['remaining_time'])
-    Chronos.run(timer)
-    System.logout()
-    assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 
+=======
+>>>>>>> be58584e206988a1dae835d9f27400fe1f1ec1d9
 
 
