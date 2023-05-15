@@ -19,8 +19,10 @@ class Timer:
         self.remain = seconds
 
 class JData():
-    def read(self):
+    def __init__(self):
         self.time_remain = 10
+    def read(self):
+        return self.time_remain
 
 class Chronos:
     def run(timer: Timer):

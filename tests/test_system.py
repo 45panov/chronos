@@ -1,8 +1,7 @@
 from chronos import *
 
 def test_system_return_timer():
-    j_data = JData()
-    j_data.read()
+    j_data = JData().read()
     timer = System().set_timer(j_data.time_remain)
     assert timer.remain == Timer(10).remain, "System().set_timer() must return Timer object"
 
