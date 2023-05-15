@@ -18,7 +18,9 @@ class Timer:
         self.is_run = False
         self.remain = seconds
 
-
+class JData():
+    def read(self):
+        self.time_remain = 10
 
 class Chronos:
     def run(timer: Timer):
