@@ -18,8 +18,8 @@ def test_timer_is_0():
 
 
 def test_logout_on_timer_is_0():
-    j_data = JData()
-    timer = System().set_timer(j_data.time_remain)
+    jdata = JData()
+    timer = System().set_timer(jdata.time_remain)
     Chronos.run(timer)
     assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 

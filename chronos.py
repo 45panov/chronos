@@ -20,7 +20,8 @@ class Timer:
 
 class JData():
     def __init__(self):
-        self.time_remain = 10
+        with open("/tmp/cjdata") as f:
+            self.time_remain = 10
 
 class Chronos:
     def run(timer: Timer):
