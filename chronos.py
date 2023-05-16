@@ -20,9 +20,14 @@ class Timer:
 
 class JData():
     def __init__(self):
-        with open("/tmp/cjdata") as f:
-            self.time_remain = 10
-
+        try:
+            with open("/tmp/cjdata.json") as f:
+                self.time_remain = json.load(f)
+        except FileNotFoundError:
+            with open("/tmp/cjdata.json", mode='w') as f:
+                self.time_remain = 10
+                json.dump(self.time_remain, f)
+            
 class Chronos:
     def run(timer: Timer):
         timer.is_run = True
