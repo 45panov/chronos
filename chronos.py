@@ -1,4 +1,4 @@
-import os, time
+import os, time, json
 
 
 class System:
@@ -21,8 +21,6 @@ class Timer:
 class JData():
     def __init__(self):
         self.time_remain = 10
-    def read(self):
-        return self.time_remain
 
 class Chronos:
     def run(timer: Timer):
