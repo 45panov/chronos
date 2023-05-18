@@ -4,6 +4,7 @@ import os, time, json
 class System:
     LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",  # Keeps logout commands for different OS
                        'nt': "shutdown -l"}
+    
 
     def set_timer(self, seconds):
         return Timer(seconds)
@@ -20,10 +21,10 @@ class Timer:
 
 class JData():
     def __init__(self):
-        try:
+        if os.path.exists('/tmp/cjdata.json') and os.stat('/tmp/cjdata.json') != 0:
             with open("/tmp/cjdata.json") as f:
                 self.time_remain = json.load(f)
-        except FileNotFoundError:
+        else:        
             with open("/tmp/cjdata.json", mode='w') as f:
                 self.time_remain = 10
                 json.dump(self.time_remain, f)
