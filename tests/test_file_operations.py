@@ -7,6 +7,8 @@ def test_no_data_file():
 
 
 def test_cjdata_is_empty():
-    jdata = JData().time_remain = None
-    assert not jdata.time_remain == "", "cjdata.json can not be empty"
+    os.system("rm tmp/cjdata.json && touch tmp/cjdata.json")
+    jdata = JData()
+    assert jdata.time_remain == 10, "cjdata.json can not be empty"
+
 
