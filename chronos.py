@@ -2,11 +2,13 @@ import os, time, json
 
 
 class System:
-    LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",  # Keeps logout commands for different OS
+    # Keeps logout commands for different OS
+    LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
                        'nt': "shutdown -l"}
-    
-    PATH_TO_CJDATA = {'posix': "/tmp/cjdata.json", # Keeps paths to cjdata.json for different OS
-                      'nt': "$TMP/cjdata.json"}
+
+    # Keeps paths to cjdata.json for different OS
+    PATH_TO_CJDATA = {'posix': "/tmp/cjdata.json",
+                      'nt': os.getenv('TMP') + r"\cjdata.json"}
 
     @classmethod
     def logout(cls):
