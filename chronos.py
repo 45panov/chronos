@@ -13,7 +13,7 @@ class System:
     @classmethod
     def logout(cls):
         return "os.system(" + cls.LOGOUT_COMMANDS[os.name] + ")"
-       
+
     @classmethod
     def path_to_cjdata(cls):
         return cls.PATH_TO_CJDATA[os.name]
@@ -33,7 +33,7 @@ class JData(System):
         if os.path.exists(super().path_to_cjdata()) and os.stat(super().path_to_cjdata()) != 0:
             with open(super().path_to_cjdata()) as f:
                 self.time_remain = json.load(f)
-        else:        
+        else:
             with open(super().path_to_cjdata(), mode='w') as f:
                 self.time_remain = 10
                 json.dump(self.time_remain, f)
