@@ -23,6 +23,13 @@ def test_logout_on_timer_is_0():
     Chronos.run(timer)
     assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 
+def test_timer_is_run():
+    timer = Timer(10)
+    assert timer
+
+def test_timer_0_is_false():
+    timer = Timer(0)
+    assert not timer
 
 
 
