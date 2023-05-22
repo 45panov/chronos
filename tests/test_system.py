@@ -9,7 +9,7 @@ def test_system_return_timer():
 def test_system_performs_logout():
     assert System.logout() == "os.system(" + System().LOGOUT_COMMANDS[os.name] + ")"
 
-@pytest.mark.parametrize('test_os, expected', [('posix', "/etc/cjdata.json"), 
+@pytest.mark.parametrize('test_os, expected', [('posix', "/tmp/cjdata.json"), 
                                                ('nt', "$TMP/cjdata.json")])
 def test_path_to_cjdata(test_os, expected):
     if os.name == test_os:
