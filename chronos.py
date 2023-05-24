@@ -15,7 +15,7 @@ class System:
 
     @classmethod
     def logout(cls):
-        return "os.system(" + cls.LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes of production
+        return "os.system(" + cls.LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
 
     @classmethod
     def path_to_cjdata(cls):
@@ -27,7 +27,6 @@ class System:
 
 class Timer:
     def __init__(self, seconds: int):
-        self.is_run = False
         self.remain = seconds
 
     def __bool__(self):
@@ -36,8 +35,8 @@ class Timer:
 
 class JData(System):
     def __init__(self):
-        if os.path.exists(super().path_to_cjdata()) and os.stat(super().path_to_cjdata()).st_size > 0:
-            with open(super().path_to_cjdata(), mode='r') as f:
+        if os.path.exists(self.path_to_cjdata()) and os.stat(self.path_to_cjdata()).st_size > 0:
+            with open(self.path_to_cjdata(), mode='r') as f:
                 try:
                     self.time_remain = json.load(f)
                 except JSONDecodeError:
@@ -45,15 +44,13 @@ class JData(System):
 
 
         else:
-            with open(super().path_to_cjdata(), mode='w') as f:
+            with open(self.path_to_cjdata(), mode='w') as f:
                 self.time_remain = 10
                 json.dump(self.time_remain, f)
 
 
 class Chronos:
     def run(timer: Timer):
-        timer.is_run = True
         while timer:
             timer.remain -= 1
-        timer.is_run = False
         return timer
