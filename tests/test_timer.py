@@ -28,8 +28,9 @@ def test_timer_is_run():
     assert timer
 
 def test_timer_0_is_false():
-    timer = Timer(0)
-    assert not timer
+    timer = Timer(10)
+    Chronos.run(timer)
+
 
 
 

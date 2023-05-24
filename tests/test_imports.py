@@ -7,6 +7,7 @@ def test_imports():
     assert 'os' in globals(), "os must be in globals"
     assert 'time' in globals(), "time must be in globals"
     assert 'json' in globals(), "json must be in globals"
+    assert 'JSONDecodeError' in globals(), "JSONDecoderError must be in globals"
 
 
 
