@@ -1,4 +1,4 @@
-date_time.json
+*.json
 .idea
 .pytest_cache
 __pycache__
