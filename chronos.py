@@ -33,7 +33,7 @@ class Timer:
 
 class DataStorage(System):
     def __init__(self):
-        if os.path.exists(self.path_to_storage()) and os.stat(self.path_to_storage()).st_size > 0:
+        if os.path.exists(self.path_to_storage()):
             with open(self.path_to_storage(), mode='r+') as f:
                 try:
                     self.time_remain = json.load(f)
