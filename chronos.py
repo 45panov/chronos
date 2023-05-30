@@ -7,17 +7,20 @@ from json import JSONDecodeError
 class System:
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
-                       'nt': "shutdown -l"}
+                        'nt': "shutdown -l"}
 
-    _STORAGE = 'storage.json'
+    if os.name == 'posix':
+        _STORAGE_FILE = '/tmp/storage.json'
+    if os.name == 'nt':
+        _STORAGE_FILE = os.environ['TMP'] + r'\storage.json'
+
+    @classmethod
+    def path_to_storage(cls):
+        return cls._STORAGE_FILE
 
     @classmethod
     def logout(cls):
         return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
-
-    @classmethod
-    def path_to_storage(cls):
-        return cls._STORAGE
 
     def set_timer(self, seconds):
         return Timer(seconds)
