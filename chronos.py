@@ -10,13 +10,13 @@ class System:
                         'nt': "shutdown -l"}
 
     if os.name == 'posix':
-        _STORAGE_FILE = '/tmp/storage.json'
+        _PATH_TO_STORAGE = '/tmp/storage.json'
     if os.name == 'nt':
-        _STORAGE_FILE = os.environ['TMP'] + r'\storage.json'
+        _PATH_TO_STORAGE = os.environ['TMP'] + r'\storage.json'
 
     @classmethod
     def path_to_storage(cls):
-        return cls._STORAGE_FILE
+        return cls._PATH_TO_STORAGE
 
     @classmethod
     def logout(cls):
@@ -26,15 +26,7 @@ class System:
         return Timer(seconds)
 
 
-class Timer:
-    def __init__(self, seconds: int):
-        self.remain = seconds
-
-    def __bool__(self):
-        return False if self.remain == 0 else True
-
-
-class DataStorage(System):
+class Storage(System):
     def __init__(self):
         if os.path.exists(self.path_to_storage()):
             with open(self.path_to_storage(), mode='r+') as f:
@@ -49,6 +41,17 @@ class DataStorage(System):
             with open(self.path_to_storage(), mode='w') as f:
                 self.time_remain = 10
                 json.dump(self.time_remain, f)
+
+
+class Timer:
+    def __init__(self, seconds: int):
+        self.remain = seconds
+
+    def __bool__(self):
+        return False if self.remain == 0 else True
+
+
+
 
 
 class Chronos:

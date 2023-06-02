@@ -3,24 +3,24 @@ import pytest
 
 
 def test_storage_is_DataStorage():
-    storage = DataStorage()
-    assert isinstance(storage, DataStorage)
+    storage = Storage()
+    assert isinstance(storage, Storage)
 
 
 def test_storage():
-    storage = DataStorage()
+    storage = Storage()
     assert storage.time_remain == 10
 
 
 def test_no_storage_file():
     if os.name == 'posix':
         os.system("rm -f " + System.path_to_storage())
-        storage = DataStorage()
+        storage = Storage()
         assert storage.time_remain == 10
 
     if os.name == 'nt':
         os.system("del " + System.path_to_storage())
-        storage = DataStorage()
+        storage = Storage()
         assert storage.time_remain == 10
 
 
@@ -38,5 +38,5 @@ def test_storage_path(os_name, expected_storage_path):
     """
 
     if os.name == os_name:
-        storage = DataStorage()
+        storage = Storage()
         assert storage.path_to_storage() == expected_storage_path
