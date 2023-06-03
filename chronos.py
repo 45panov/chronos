@@ -31,11 +31,15 @@ class Storage(Core):
     def __init__(self):
         with open(self.path_to_storage(), mode='r+') as f:
             try:
-                self.time_remain = json.load(f)
-            except JSONDecodeError:
+                json_data = json.load(f)
+                self.time_remain = json_data.get('time_remain')
+            except (JSONDecodeError, ValueError):
                 # Here must be log entry
                 self.time_remain = 10
-                json.dump(self.time_remain, f)
+                json_data = {
+                    'time_remain': self.time_remain
+                }
+                json.dump(json_data, f)
 
 
 class Timer:
