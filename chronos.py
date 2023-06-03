@@ -1,22 +1,23 @@
 import json
 import time
 import os
+from tempfile import gettempdir
 from json import JSONDecodeError
 
 
-class System:
+class Core:
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
                         'nt': "shutdown -l"}
 
-    if os.name == 'posix':
-        _PATH_TO_STORAGE = '/tmp/storage.json'
-    if os.name == 'nt':
-        _PATH_TO_STORAGE = os.environ['TMP'] + r'\storage.json'
+    _STORAGE = gettempdir() + os.sep + 'storage.json'
 
     @classmethod
     def path_to_storage(cls):
-        return cls._PATH_TO_STORAGE
+        if not os.path.exists(cls._STORAGE):
+            with open(cls._STORAGE, mode='w') as f:
+                pass
+        return cls._STORAGE
 
     @classmethod
     def logout(cls):
@@ -26,19 +27,13 @@ class System:
         return Timer(seconds)
 
 
-class Storage(System):
+class Storage(Core):
     def __init__(self):
-        if os.path.exists(self.path_to_storage()):
-            with open(self.path_to_storage(), mode='r+') as f:
-                try:
-                    self.time_remain = json.load(f)
-                except JSONDecodeError:
-                    self.time_remain = 10
-                    json.dump(self.time_remain, f)
-
-
-        else:
-            with open(self.path_to_storage(), mode='w') as f:
+        with open(self.path_to_storage(), mode='r+') as f:
+            try:
+                self.time_remain = json.load(f)
+            except JSONDecodeError:
+                # Here must be log entry
                 self.time_remain = 10
                 json.dump(self.time_remain, f)
 
@@ -49,9 +44,6 @@ class Timer:
 
     def __bool__(self):
         return False if self.remain == 0 else True
-
-
-
 
 
 class Chronos:

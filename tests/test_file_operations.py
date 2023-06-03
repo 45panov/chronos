@@ -14,12 +14,12 @@ def test_storage():
 
 def test_no_storage_file():
     if os.name == 'posix':
-        os.system("rm -f " + System.path_to_storage())
+        os.system("rm -f " + Core.path_to_storage())
         storage = Storage()
         assert storage.time_remain == 10
 
     if os.name == 'nt':
-        os.system("del " + System.path_to_storage())
+        os.system("del " + Core.path_to_storage())
         storage = Storage()
         assert storage.time_remain == 10
 
