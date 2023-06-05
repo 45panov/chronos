@@ -40,3 +40,8 @@ def test_storage_path(os_name, expected_storage_path):
     if os.name == os_name:
         storage = Storage()
         assert storage.path_to_storage() == expected_storage_path
+
+def test_get_date_from_storage():
+    storage = Storage()
+    assert storage.last_date == time.strftime("%d%m%Y", time.gmtime())
+
