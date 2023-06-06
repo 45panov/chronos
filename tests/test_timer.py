@@ -44,4 +44,11 @@ def test_timer_set_from_storage():
     timer = Timer(storage)
     assert timer.remain == 10, "Timer.remain must be equal to 10"
 
+def test_timer_check_date():
+    storage = Storage()
+    temp = storage.last_date[:-1]
+    storage.last_date = temp + '0'
+    timer = Timer(storage)
+    assert storage.last_date == Core.current_date
+
 
