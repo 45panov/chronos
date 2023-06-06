@@ -21,17 +21,17 @@ class Core:
     def path_to_storage(cls):
         """ Returns path to storage.json file or creates it if it doesn't exist. """
         if not os.path.exists(cls._STORAGE):
-            with open(cls._STORAGE, mode='w') as f:
-                pass
+            try:
+                with open(cls._STORAGE, mode='w') as f:
+                    pass
+            except PermissionError:
+                pass  # Here must be log entry
         return cls._STORAGE
 
     @classmethod
-    def logout(cls):
+    def logout(cls) -> object:
         """ Performs platform depending logout command. """
         return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
-
-    def set_timer(self, seconds):
-        return Timer(seconds)
 
 
 class Storage(Core):
@@ -48,8 +48,8 @@ class Storage(Core):
 
 
 class Timer:
-    def __init__(self, seconds: int):
-        self.remain = seconds
+    def __init__(self, source: Storage):
+        self.remain = source.time_remain
 
     def __bool__(self):
         return False if self.remain == 0 else True
