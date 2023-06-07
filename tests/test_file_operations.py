@@ -27,7 +27,7 @@ def test_no_storage_file():
 @pytest.mark.parametrize(
     'os_name, expected_storage_path', [
         ('posix', '/tmp/storage.json'),
-        ('nt', os.environ['TMP'] + r'\storage.json')
+        ('nt', f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\Temp\\storage.json")
     ]
 )
 def test_storage_path(os_name, expected_storage_path):
