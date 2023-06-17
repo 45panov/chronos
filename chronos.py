@@ -41,10 +41,14 @@ class Storage(Core):
                 self.time_remain, self.last_date = json.load(f).values()
             except (JSONDecodeError, ValueError):
                 # Here must be log entry
-                json_data = {'time_remain': super().default_time,
-                             'last_date': super().current_date}
-                self.time_remain, self.last_date = super().default_time, super().current_date
-                json.dump(json_data, f)
+                self.reset()
+
+    def reset(self):
+        """ Loads default Core.current_date and Core.default_time to storage.json """
+        with open(self.path_to_storage(), mode='w') as f:
+            self.last_date, self.time_remain = super().current_date, super().default_time
+            json.dump({'time_remain': super().default_time,
+                       'last_date': super().current_date}, f)
 
 
 class Timer:

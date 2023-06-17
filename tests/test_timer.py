@@ -51,4 +51,9 @@ def test_timer_check_date():
     timer = Timer(storage)
     assert storage.last_date == Core.current_date
 
+def test_storage_reset():
+    storage = Storage()
+    storage.last_date = '00000000'
+    storage.reset()
+    assert storage.last_date == Core.current_date, "Storage.reset() must equalaze last_date to current_date"
 
