@@ -52,8 +52,10 @@ class Storage(Core):
 
 
 class Timer:
-    def __init__(self, source: Storage):
-        self.remain = source.time_remain
+    def __init__(self, storage: Storage):
+        if storage.last_date != Core.current_date:
+            storage.reset()
+        self.remain = storage.time_remain
 
     def __bool__(self):
         return False if self.remain == 0 else True
