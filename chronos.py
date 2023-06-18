@@ -19,7 +19,7 @@ class Core:
 
     @classmethod
     def path_to_storage(cls):
-        """ Returns path to storage.json file or creates it if it doesn't exist. """
+        """ Creates storage.json file or returns its path if one already exists. """
         if not os.path.exists(cls._STORAGE):
             try:
                 with open(cls._STORAGE, mode='w') as f:
