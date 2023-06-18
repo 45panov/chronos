@@ -10,20 +10,20 @@ def test_timer_1():
 
 def test_chronos_reduces_timer():
     timer = Timer(Storage())
-    Chronos.run(timer)
+    timer.run()
     assert timer.remain == 0, "timer.is_run must be False after Chronos has reduced it to 0"
 
 
 def test_timer_is_0():
     timer = Timer(Storage())
-    Chronos.run(timer)
+    timer.run()
     assert timer.remain == 0, 'timer.is_run must be False if Timer(0)'
 
 
 def test_logout_on_timer_is_0():
     jdata = Storage()
     timer = Timer(jdata)
-    Chronos.run(timer)
+    timer.run()
     assert Core.logout() == "os.system(" + Core()._LOGOUT_COMMANDS[os.name] + ")"
 
 

@@ -29,7 +29,7 @@ class Core:
         return cls._STORAGE
 
     @classmethod
-    def logout(cls) -> object:
+    def logout(cls):
         """ Performs platform depending logout command. """
         return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
 
@@ -58,9 +58,6 @@ class Timer:
     def __bool__(self):
         return False if self.remain == 0 else True
 
-
-class Chronos:
-    def run(timer: Timer):
-        while timer:
-            timer.remain -= 1
-        return timer
+    def run(self):
+        while self.remain > 0: self.remain -= 1
+        return None
