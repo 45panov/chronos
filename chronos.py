@@ -4,9 +4,12 @@ import os
 from tempfile import gettempdir
 from json import JSONDecodeError
 
+""" While PRODUCTION is False Cronos runs in test mode. It returns
+logout command as a string variable. When PRODUCTION is True Cronos 
+performs former logout command."""
+PRODUCTION = False
 
-class Core:
-    # Here must be log entry
+class Core: # Here must be log entry
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
                         'nt': "shutdown -l"}
@@ -31,7 +34,10 @@ class Core:
     @classmethod
     def logout(cls):
         """ Performs platform depending logout command. """
-        return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
+        if PRODUCTION:
+            os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
+        else:
+            return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  
 
 
 class Storage(Core):
