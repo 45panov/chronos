@@ -4,10 +4,13 @@ import os
 from tempfile import gettempdir
 from json import JSONDecodeError
 
-""" While PRODUCTION is False Cronos runs in test mode. It returns
-logout command as a string variable. When PRODUCTION is True Cronos 
+""" While PRODUCTION is 0 Chronos runs in test mode. It returns
+logout command as a string variable. When PRODUCTION is 0 Chronos 
 performs former logout command."""
-PRODUCTION = False
+PRODUCTION = 0
+
+""" DEFAULT_TIME is the time in seconds which pass before Chronos performs logout. """
+DEFAULT_TIME = 10
 
 class Core: # Here must be log entry
     # Keeps logout commands for different OS
@@ -16,7 +19,7 @@ class Core: # Here must be log entry
     # Keeps path to storage file
     _STORAGE = gettempdir() + os.sep + 'storage.json'
 
-    default_time = 10
+    # default_time = DEFAULT_TIME
 
     current_date = time.strftime("%d%m%Y", time.gmtime())
 
@@ -52,8 +55,8 @@ class Storage(Core):
     def reset(self):
         """ Loads default Core.current_date and Core.default_time to storage.json """
         with open(self.path_to_storage(), mode='w') as f:
-            self.last_date, self.time_remain = super().current_date, super().default_time
-            json.dump({'time_remain': super().default_time,
+            self.last_date, self.time_remain = super().current_date, DEFAULT_TIME
+            json.dump({'time_remain': DEFAULT_TIME,
                        'last_date': super().current_date}, f)
 
 
@@ -69,3 +72,8 @@ class Timer:
     def run(self):
         while self.remain > 0: self.remain -= 1
         return None
+
+
+# Main part starts here.
+Timer(Storage()).run()
+Core.logout()
