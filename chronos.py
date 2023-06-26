@@ -4,9 +4,9 @@ import os
 from tempfile import gettempdir
 from json import JSONDecodeError
 
+RUN_MODE = 'test' # 'test' for test mode, 'prod' for production
 
-class Core:
-    # Here must be log entry
+class Core: # Here must be log entry
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
                         'nt': "shutdown -l"}
@@ -31,9 +31,10 @@ class Core:
     @classmethod
     def logout(cls):
         """ Performs platform depending logout command. """
-        return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  # Strip quotes on production
-
-
+        if RUN_MODE == 'prod':
+            os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
+        elif RUN_MODE == 'test':
+            return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  
 class Storage(Core):
     def __init__(self):
         with open(self.path_to_storage(), mode='r+') as f:
