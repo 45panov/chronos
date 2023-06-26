@@ -20,8 +20,6 @@ class Core:  # Here must be log entry
     # Keeps path to storage file
     _STORAGE = gettempdir() + os.sep + 'storage.json'
 
-    # default_time = DEFAULT_TIME
-
     current_date = time.strftime("%d%m%Y", time.gmtime())
 
     @classmethod
