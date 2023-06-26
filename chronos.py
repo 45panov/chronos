@@ -12,7 +12,8 @@ PRODUCTION = 0
 """ DEFAULT_TIME is the time in seconds which pass before Chronos performs logout. """
 DEFAULT_TIME = 10
 
-class Core: # Here must be log entry
+
+class Core:  # Here must be log entry
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {'posix': f"pkill -kill -u {os.getlogin()}",
                         'nt': "shutdown -l"}
@@ -40,7 +41,7 @@ class Core: # Here must be log entry
         if PRODUCTION:
             os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
         else:
-            return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"  
+            return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"
 
 
 class Storage(Core):
