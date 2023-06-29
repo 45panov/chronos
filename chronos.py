@@ -66,6 +66,7 @@ class Timer:
     def __init__(self, storage: Storage):
         if storage.last_date != Core.current_date:
             storage.reset()
+            storage.__init__()
         self.remain = storage.time_remain
         self.save = storage.save
 
@@ -75,8 +76,9 @@ class Timer:
     def run(self):
         while self.remain > 0:
             self.remain -= 1
-            self.save(self.remain, Core.current_date)
-        return None
+            if self.remain % 10 == 0:  # Save timer state every 10 seconds
+                self.save(self.remain, Core.current_date)
+            time.sleep(1)
 
 
 # Main part starts here.
