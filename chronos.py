@@ -51,12 +51,14 @@ class Storage(Core):
                 # Here must be log entry
                 self.reset()
 
-    def reset(self):
-        """ Loads default Core.current_date and Core.default_time to storage.json """
+    def save(self, time_value: int, date_value: str) -> None:
         with open(self.path_to_storage(), mode='w') as f:
-            self.last_date, self.time_remain = super().current_date, DEFAULT_TIME
-            json.dump({'time_remain': DEFAULT_TIME,
-                       'last_date': super().current_date}, f)
+            json.dump({'time_remain': time_value, 'last_date': date_value}, f)
+
+    def reset(self) -> None:
+        """ Loads default Core.current_date and Core.default_time to storage.json """
+        self.time_remain, self.last_date  = DEFAULT_TIME, super().current_date,
+        self.save(self.time_remain, self.last_date)
 
 
 class Timer:

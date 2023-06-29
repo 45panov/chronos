@@ -45,3 +45,14 @@ def test_get_date_from_storage():
     storage = Storage()
     assert storage.last_date == time.strftime("%d%m%Y", time.gmtime())
 
+
+def test_save_state():
+    storage = Storage()
+    timer = Timer(storage)
+    storage.save(3, Core.current_date)
+    storage = Storage()
+    assert storage.time_remain == 3, "storage.time_remain must be equal to 10 after storage.save(10)"
+
+
+
+
