@@ -43,7 +43,7 @@ def test_storage_path(os_name, expected_storage_path):
 
 def test_get_date_from_storage():
     storage = Storage()
-    assert storage.last_date == time.strftime("%d%m%Y", time.gmtime())
+    assert storage.last_date == time.strftime("%d%m%Y", time.localtime())
 
 
 def test_save_state():

@@ -20,7 +20,7 @@ class Core:  # Here must be log entry
     # Keeps path to storage file
     _STORAGE = gettempdir() + os.sep + 'storage.json'
 
-    current_date = time.strftime("%d%m%Y", time.gmtime())
+    current_date = time.strftime("%d%m%Y", time.localtime())
 
     @classmethod
     def path_to_storage(cls):
@@ -66,6 +66,7 @@ class Timer:
     def __init__(self, storage: Storage):
         if storage.last_date != Core.current_date:
             storage.reset()
+            # storage.__init__()
         self.remain = storage.time_remain
         self.save = storage.save
 
