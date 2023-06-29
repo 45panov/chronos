@@ -27,16 +27,16 @@ def test_logout_on_timer_is_0():
     assert Core.logout() == "os.system(" + Core()._LOGOUT_COMMANDS[os.name] + ")"
 
 
-def test_timer_is_run():
-    timer = Timer(Storage())
-    assert timer
-
-
-def test_timer_0_is_false():
-    storage = Storage()
-    storage.time_remain = 0
-    timer = Timer(storage)
-    assert bool(timer) == False
+# def test_timer_is_run():
+#     timer = Timer(Storage())
+#     assert timer
+#
+#
+# def test_timer_0_is_false():
+#     storage = Storage()
+#     storage.time_remain = 0
+#     timer = Timer(storage)
+#     assert bool(timer) == False
 
 
 def test_timer_set_from_storage():

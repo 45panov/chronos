@@ -9,7 +9,7 @@ def test_storage_is_DataStorage():
 
 def test_storage():
     storage = Storage()
-    assert storage.time_remain == 10
+    assert isinstance(storage.time_remain, int), "Storage.time_remain must be an instance of int"
 
 
 def test_no_storage_file():

@@ -52,12 +52,13 @@ class Storage(Core):
                 self.reset()
 
     def save(self, time_value: int, date_value: str) -> None:
+        """ Takes time and date values and loads it to storage.json """
         with open(self.path_to_storage(), mode='w') as f:
             json.dump({'time_remain': time_value, 'last_date': date_value}, f)
 
     def reset(self) -> None:
         """ Loads default Core.current_date and Core.default_time to storage.json """
-        self.time_remain, self.last_date  = DEFAULT_TIME, super().current_date,
+        self.time_remain, self.last_date = DEFAULT_TIME, super().current_date,
         self.save(self.time_remain, self.last_date)
 
 
@@ -66,12 +67,15 @@ class Timer:
         if storage.last_date != Core.current_date:
             storage.reset()
         self.remain = storage.time_remain
+        self.save = storage.save
 
-    def __bool__(self):
-        return False if self.remain == 0 else True
+    # def __bool__(self):
+    #     return False if self.remain == 0 else True
 
     def run(self):
-        while self.remain > 0: self.remain -= 1
+        while self.remain > 0:
+            self.remain -= 1
+            self.save(self.remain, Core.current_date)
         return None
 
 
