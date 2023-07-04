@@ -1,8 +1,12 @@
+import logging
 import json
 import time
 import os
 from tempfile import gettempdir
 from json import JSONDecodeError
+
+logging.basicConfig(level=logging.DEBUG, filename="log.log")
+logging.debug("Chronos started")
 
 """ While PRODUCTION is 0 Chronos runs in test mode. It returns
 logout command as a string variable. When PRODUCTION is 0 Chronos 
@@ -30,7 +34,7 @@ class Core:  # Here must be log entry
                 with open(cls._STORAGE, mode='w') as f:
                     pass
             except PermissionError:
-                pass  # Here must be log entry
+                logging.debug("Permission error in Core.path_to_storage()")
         return cls._STORAGE
 
     @classmethod
@@ -48,7 +52,7 @@ class Storage(Core):
             try:
                 self.time_remain, self.last_date = json.load(f).values()
             except (JSONDecodeError, ValueError):
-                # Here must be log entry
+                logging.debug("JSONDecode or ValueError in Storage.__init__()")
                 self.reset()
 
     def reset(self):
