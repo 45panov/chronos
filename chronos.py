@@ -24,7 +24,7 @@ class Core:  # Here must be log entry
     # Keeps path to storage file
     _STORAGE = gettempdir() + os.sep + 'storage.json'
 
-    current_date = time.strftime("%d%m%Y", time.localtime())
+    current_date = time.strftime("%d%m%Y", time.gmtime())
 
     @classmethod
     def path_to_storage(cls):
@@ -55,31 +55,26 @@ class Storage(Core):
                 logging.debug("JSONDecode or ValueError in Storage.__init__()")
                 self.reset()
 
-    def save(self, time_value: int, date_value: str) -> None:
-        """ Takes time and date values and loads it to storage.json """
-        with open(self.path_to_storage(), mode='w') as f:
-            json.dump({'time_remain': time_value, 'last_date': date_value}, f)
-
-    def reset(self) -> None:
+    def reset(self):
         """ Loads default Core.current_date and Core.default_time to storage.json """
-        self.time_remain, self.last_date = DEFAULT_TIME, super().current_date,
-        self.save(self.time_remain, self.last_date)
+        with open(self.path_to_storage(), mode='w') as f:
+            self.last_date, self.time_remain = super().current_date, DEFAULT_TIME
+            json.dump({'time_remain': DEFAULT_TIME,
+                       'last_date': super().current_date}, f)
 
 
 class Timer:
     def __init__(self, storage: Storage):
         if storage.last_date != Core.current_date:
             storage.reset()
-            # storage.__init__()
         self.remain = storage.time_remain
-        self.save = storage.save
+
+    def __bool__(self):
+        return False if self.remain == 0 else True
 
     def run(self):
-        while self.remain > 0:
-            self.remain -= 1
-            if self.remain % 10 == 0:  # Save timer state every 10 seconds
-                self.save(self.remain, Core.current_date)
-            time.sleep(1)
+        while self.remain > 0: self.remain -= 1
+        return None
 
 
 # Main part starts here.
