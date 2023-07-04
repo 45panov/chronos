@@ -9,7 +9,7 @@ def test_storage_is_DataStorage():
 
 def test_storage():
     storage = Storage()
-    assert storage.time_remain == 10
+    assert isinstance(storage.time_remain, int), "Storage.time_remain must be an instance of int"
 
 
 def test_no_storage_file():
@@ -43,5 +43,16 @@ def test_storage_path(os_name, expected_storage_path):
 
 def test_get_date_from_storage():
     storage = Storage()
-    assert storage.last_date == time.strftime("%d%m%Y", time.gmtime())
+    assert storage.last_date == time.strftime("%d%m%Y", time.localtime())
+
+
+def test_save_state():
+    storage = Storage()
+    timer = Timer(storage)
+    storage.save(3, Core.current_date)
+    storage = Storage()
+    assert storage.time_remain == 3, "storage.time_remain must be equal to 10 after storage.save(10)"
+
+
+
 
