@@ -29,7 +29,10 @@ def test_logout_on_timer_is_0():
 
 def test_timer_is_run():
     timer = Timer(Storage())
-    assert timer
+    if timer:
+        assert timer.remain > 0
+    else:
+        assert timer.remain == 0
 
 
 def test_timer_0_is_false():

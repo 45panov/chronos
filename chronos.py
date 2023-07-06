@@ -75,6 +75,9 @@ class Timer:
         self.remain = storage.time_remain
         self.save = storage.save
 
+    def __bool__(self):
+        return True if self.remain !=0  else False
+
     def run(self):
         while self.remain > 0:
             self.remain -= 1
