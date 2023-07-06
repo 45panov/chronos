@@ -1,3 +1,4 @@
+import logging
 import json
 import time
 import os
@@ -16,8 +17,8 @@ DEFAULT_TIME = 10
 class Core:  # Here must be log entry
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {"posix": f"pkill -kill -u {os.getlogin()}", "nt": "shutdown -l"}
+    
     # Keeps path to storage file
-
     _STORAGE = gettempdir() + os.sep + "storage.json"
 
     current_date = time.strftime("%d%m%Y", time.localtime())
@@ -79,7 +80,7 @@ class Timer:
             self.remain -= 1
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
                 self.save(self.remain, Core.current_date)
-            time.sleep(1)
+            time.sleep(1 if PRODUCTION else 0)
 
 
 # Main part starts here.
