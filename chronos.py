@@ -37,10 +37,7 @@ class Core:  # Here must be log entry
     @classmethod
     def logout(cls):
         """Performs platform depending logout command."""
-        if PRODUCTION:
-            os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
-        else:
-            return "os.system(" + cls._LOGOUT_COMMANDS[os.name] + ")"
+        os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
 
 
 class Storage(Core):
@@ -79,13 +76,21 @@ class Timer:
         return True if self.remain !=0  else False
 
     def run(self):
-        while self.remain > 0:
+        if self.remain > 0:
             self.remain -= 1
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
                 self.save(self.remain, Core.current_date)
             time.sleep(1 if PRODUCTION else 0)
-
+            return self.remain
+        return self.remain
 
 # Main part starts here.
-Timer(Storage()).run()
-Core.logout()
+storage = Storage()
+timer = Timer(storage)
+while timer:
+    timer.run()
+if PRODUCTION and not timer:
+    Core.logout()
+elif not PRODUCTION and not timer:
+    print("Chronos finished its job in test  mode.")
+

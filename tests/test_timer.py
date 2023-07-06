@@ -10,7 +10,8 @@ def test_timer_1():
 
 def test_chronos_reduces_timer():
     timer = Timer(Storage())
-    timer.run()
+    while timer:
+        timer.run()
     assert timer.remain == 0, "timer.is_run must be False after Chronos has reduced it to 0"
 
 
@@ -61,3 +62,10 @@ def test_storage_reset():
     storage.last_date = '00000000'
     storage.reset()
     assert storage.last_date == Core.current_date, "Storage.reset() must equalaze last_date to current_date"
+
+def test_timer_yield():
+    storage = Storage()
+    timer = Timer(storage)
+    timer.remain = 2
+    timer.run()
+    assert timer.remain == 1
