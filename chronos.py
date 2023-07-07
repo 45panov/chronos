@@ -1,4 +1,13 @@
 import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="log.log",
+)
+
+logging.debug("File chronos.py opened, logging started")
 import json
 import time
 import os
@@ -19,7 +28,7 @@ class Core:  # Here must be log entry
     _LOGOUT_COMMANDS = {"posix": f"pkill -kill -u {os.getlogin()}", "nt": "shutdown -l"}
     
     # Keeps path to storage file
-    _STORAGE = gettempdir() + os.sep + "storage.json"
+    _STORAGE = "storage.json"
 
     current_date = time.strftime("%d%m%Y", time.localtime())
 
@@ -31,7 +40,7 @@ class Core:  # Here must be log entry
                 with open(cls._STORAGE, mode="w") as f:
                     pass
             except PermissionError:
-                pass  # Here must be log entry
+                logging.debug("Permission error in Core.path_to_storage().")
         return cls._STORAGE
 
     @classmethod
@@ -47,7 +56,7 @@ class Storage(Core):
             try:
                 self.time_remain, self.last_date = json.load(f).values()
             except (JSONDecodeError, ValueError):
-                # Here must be log entry
+                logging.debug("JSONDecodeError or Value error in Storage.__init__()")
                 self.reset()
 
     def save(self, time_value: int, date_value: str) -> None:
@@ -77,21 +86,26 @@ class Timer:
         return True if self.remain !=0  else False
 
     def run(self):
+        logging.debug("Timer.run()")
         if self.remain > 0:
             self.remain -= 1
+            logging.debug(f"Tiimer is running with remain={self.remain}")
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
                 self.save(self.remain, Core.current_date)
             time.sleep(1 if PRODUCTION else 0)
             return self.remain
+        logging.debug("Timer is 0")
         return self.remain
 
 # Main part starts here.
-storage = Storage()
-timer = Timer(storage)
-while timer:
-    timer.run()
-if PRODUCTION and not timer:
-    Core.logout()
-elif not PRODUCTION and not timer:
-    print("Chronos finished its job in test  mode.")
+if __name__ == "__main__":
+    logging.debug("Chronos main part started.")
+    storage = Storage()
+    timer = Timer(storage)
+    while timer:
+        timer.run()
+    if PRODUCTION and not timer:
+        Core.logout()
+    elif not PRODUCTION and not timer:
+        print("Chronos finished its job in test  mode.")
 
