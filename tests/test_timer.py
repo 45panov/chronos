@@ -25,7 +25,7 @@ def test_logout_on_timer_is_0():
     jdata = Storage()
     timer = Timer(jdata)
     timer.run()
-    assert Core.logout() == "os.system(" + Core()._LOGOUT_COMMANDS[os.name] + ")"
+    assert Core.logout() == f"os.system(\"{Core()._LOGOUT_COMMANDS[os.name]}\")"
 
 
 def test_timer_is_run():

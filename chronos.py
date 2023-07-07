@@ -37,8 +37,9 @@ class Core:  # Here must be log entry
     @classmethod
     def logout(cls):
         """Performs platform depending logout command."""
-        os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
-
+        if PRODUCTION:
+            os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
+        return f"os.system(\"{cls._LOGOUT_COMMANDS[os.name]}\")"
 
 class Storage(Core):
     def __init__(self):
