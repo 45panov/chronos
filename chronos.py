@@ -10,10 +10,10 @@ try:
         level=logging.DEBUG,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename=os.getcwd()+os.sep+"log.log",
+        filename=os.path.abspath(os.path.dirname(__file__)) + os.sep + "log.log",
     )
 except:
-    raise("Logging error!")
+    raise Exception("Logging error!")
 logging.debug("---FILE CHRONOS.PY OPENED, LOGGING STARTED---")
 
 """ While PRODUCTION is 0 Chronos runs in test mode. It returns
@@ -24,26 +24,27 @@ PRODUCTION = 0
 """ DEFAULT_TIME is the time in seconds which pass before Chronos performs logout. """
 DEFAULT_TIME = 10
 
+STORAGE = os.path.abspath(os.path.dirname(__file__)) + os.sep + "storage.json"
+
 
 class Core:  # Here must be log entry
     # Keeps logout commands for different OS
     _LOGOUT_COMMANDS = {"posix": f"pkill -kill -u {os.getlogin()}", "nt": "shutdown -l"}
-    
+
     # Keeps path to storage file
-    _STORAGE = os.getcwd() + os.sep + "storage.json"
 
     current_date = time.strftime("%d%m%Y", time.localtime())
 
     @classmethod
     def path_to_storage(cls):
         """Creates storage.json file or returns its path if one already exists."""
-        if not os.path.exists(cls._STORAGE):
+        if not os.path.exists(STORAGE):
             try:
-                with open(cls._STORAGE, mode="w") as f:
-                    pass
+                with open(STORAGE, mode="w") as f:
+                    json.dump({"time_remain": DEFAULT_TIME, "last_date": cls.current_date}, f)
             except PermissionError:
                 logging.debug("Permission error in Core.path_to_storage().")
-        return cls._STORAGE
+        return STORAGE
 
     @classmethod
     def logout(cls):
@@ -51,6 +52,7 @@ class Core:  # Here must be log entry
         if PRODUCTION:
             os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
         return f"os.system(\"{cls._LOGOUT_COMMANDS[os.name]}\")"
+
 
 class Storage(Core):
     def __init__(self):
@@ -69,6 +71,7 @@ class Storage(Core):
                 json.dump({"time_remain": time_value, "last_date": date_value}, f)
             except:
                 logging.debug("json.dump failed in Storage.save")
+
     def reset(self) -> None:
         """Loads default Core.current_date and Core.default_time to storage.json"""
         self.time_remain, self.last_date = (
@@ -88,7 +91,7 @@ class Timer:
         self.save = storage.save
 
     def __bool__(self):
-        return True if self.remain !=0  else False
+        return True if self.remain != 0 else False
 
     def run(self):
         logging.debug("Timer.run()")
@@ -102,6 +105,7 @@ class Timer:
         logging.debug("Timer is 0")
         return self.remain
 
+
 # Main part starts here.
 if __name__ == "__main__":
     logging.debug("Chronos main part started.")
@@ -114,4 +118,4 @@ if __name__ == "__main__":
         Core.logout()
     elif not PRODUCTION and not timer:
         print("Chronos finished its job in test  mode.")
-
+SystemExit()
