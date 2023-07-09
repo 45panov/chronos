@@ -3,12 +3,12 @@ import pytest
 
 def test_system_performs_logout():
     if not PRODUCTION:
-        assert Core.logout() == f"os.system(\"{Core()._LOGOUT_COMMANDS[os.name]}\")"
+        assert Core.logout() == f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
 
 def test_switch_test_to_prod():
     """ Test switching between test and production modes. """
     if not PRODUCTION:
-        assert Core.logout() == f"os.system(\"{Core()._LOGOUT_COMMANDS[os.name]}\")"
+        assert Core.logout() == f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
 
 
 

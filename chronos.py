@@ -2,38 +2,32 @@ import logging
 import json
 import time
 import os
-from tempfile import gettempdir
+from sys import exit
 from json import JSONDecodeError
+
+PRODUCTION = 0  # If set to 1 Chronos will perform former logout command.
+
+DEFAULT_TIME = 31  # Time pass before Chronos perform logout.
+
+STORAGE = os.path.abspath(os.path.dirname(__file__)) + os.sep + "storage.json"
+
+CURRENT_DATE = time.strftime("%d%m%Y", time.localtime())
+
+LOGOUT_COMMANDS = {"posix": f"pkill -kill -u {os.getlogin()}", "nt": "shutdown -l"}
 
 try:
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename=os.path.abspath(os.path.dirname(__file__)) + os.sep + "log.log",
+        filename=os.path.abspath(os.path.dirname(__file__)) + os.sep + "log.log" if PRODUCTION == 1 else None,
     )
 except:
     raise Exception("Logging error!")
 logging.debug("---FILE CHRONOS.PY OPENED, LOGGING STARTED---")
 
-""" While PRODUCTION is 0 Chronos runs in test mode. It returns
-logout command as a string variable. When PRODUCTION is 0 Chronos 
-performs former logout command."""
-PRODUCTION = 0
-
-""" DEFAULT_TIME is the time in seconds which pass before Chronos performs logout. """
-DEFAULT_TIME = 10
-
-STORAGE = os.path.abspath(os.path.dirname(__file__)) + os.sep + "storage.json"
-
 
 class Core:  # Here must be log entry
-    # Keeps logout commands for different OS
-    _LOGOUT_COMMANDS = {"posix": f"pkill -kill -u {os.getlogin()}", "nt": "shutdown -l"}
-
-    # Keeps path to storage file
-
-    current_date = time.strftime("%d%m%Y", time.localtime())
 
     @classmethod
     def path_to_storage(cls):
@@ -41,17 +35,17 @@ class Core:  # Here must be log entry
         if not os.path.exists(STORAGE):
             try:
                 with open(STORAGE, mode="w") as f:
-                    json.dump({"time_remain": DEFAULT_TIME, "last_date": cls.current_date}, f)
+                    json.dump({"time_remain": DEFAULT_TIME, "last_date": CURRENT_DATE}, f)
             except PermissionError:
                 logging.debug("Permission error in Core.path_to_storage().")
         return STORAGE
 
-    @classmethod
-    def logout(cls):
+    @staticmethod
+    def logout():
         """Performs platform depending logout command."""
         if PRODUCTION:
-            os.system(f"{cls._LOGOUT_COMMANDS[os.name]}")
-        return f"os.system(\"{cls._LOGOUT_COMMANDS[os.name]}\")"
+            os.system(f"{LOGOUT_COMMANDS[os.name]}")
+        return f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
 
 
 class Storage(Core):
@@ -73,18 +67,17 @@ class Storage(Core):
                 logging.debug("json.dump failed in Storage.save")
 
     def reset(self) -> None:
-        """Loads default Core.current_date and Core.default_time to storage.json"""
+        """Loads default Core.CURRENT_DATE and Core.default_time to storage.json"""
         self.time_remain, self.last_date = (
             DEFAULT_TIME,
-            super().current_date,
+            CURRENT_DATE,
         )
-
         self.save(self.time_remain, self.last_date)
 
 
 class Timer:
     def __init__(self, storage: Storage):
-        if storage.last_date != Core.current_date:
+        if storage.last_date != CURRENT_DATE:
             storage.reset()
             # storage.__init__()
         self.remain = storage.time_remain
@@ -99,7 +92,8 @@ class Timer:
             self.remain -= 1
             logging.debug(f"Tiimer is running with remain={self.remain}")
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
-                self.save(self.remain, Core.current_date)
+                self.save(self.remain, CURRENT_DATE)
+                logging.debug(f"Timer state saved: {self.remain}.")
             time.sleep(1 if PRODUCTION else 0)
             return self.remain
         logging.debug("Timer is 0")
@@ -118,4 +112,3 @@ if __name__ == "__main__":
         Core.logout()
     elif not PRODUCTION and not timer:
         print("Chronos finished its job in test  mode.")
-SystemExit()

@@ -25,7 +25,7 @@ def test_logout_on_timer_is_0():
     jdata = Storage()
     timer = Timer(jdata)
     timer.run()
-    assert Core.logout() == f"os.system(\"{Core()._LOGOUT_COMMANDS[os.name]}\")"
+    assert Core.logout() == f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
 
 
 def test_timer_is_run():
@@ -54,14 +54,14 @@ def test_timer_check_date():
     temp = storage.last_date[:-1]
     storage.last_date = temp + '0'
     timer = Timer(storage)
-    assert storage.last_date == Core.current_date
+    assert storage.last_date == CURRENT_DATE
 
 
 def test_storage_reset():
     storage = Storage()
     storage.last_date = '00000000'
     storage.reset()
-    assert storage.last_date == Core.current_date, "Storage.reset() must equalaze last_date to current_date"
+    assert storage.last_date == CURRENT_DATE, "Storage.reset() must equalaze last_date to CURRENT_DATE"
 
 def test_timer_yield():
     storage = Storage()

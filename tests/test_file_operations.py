@@ -16,12 +16,12 @@ def test_no_storage_file():
     if os.name == 'posix':
         os.system("rm -f " + Core.path_to_storage())
         storage = Storage()
-        assert storage.time_remain == 10
+        assert storage.time_remain == DEFAULT_TIME
 
     if os.name == 'nt':
         os.system("del " + Core.path_to_storage())
         storage = Storage()
-        assert storage.time_remain == 10
+        assert storage.time_remain == DEFAULT_TIME
 
 
 @pytest.mark.parametrize(
@@ -39,7 +39,7 @@ def test_storage_path(os_name, expected_storage_path):
 
     if os.name == os_name:
         storage = Storage()
-        assert storage.path_to_storage() == expected_storage_path
+        assert storage.path_to_storage() + os.sep + "storage.json" == expected_storage_path
 
 def test_get_date_from_storage():
     storage = Storage()
@@ -49,7 +49,7 @@ def test_get_date_from_storage():
 def test_save_state():
     storage = Storage()
     timer = Timer(storage)
-    storage.save(3, Core.current_date)
+    storage.save(3, CURRENT_DATE)
     storage = Storage()
     assert storage.time_remain == 3, "storage.time_remain must be equal to 10 after storage.save(10)"
 
