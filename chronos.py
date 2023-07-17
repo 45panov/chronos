@@ -5,20 +5,20 @@ from sys import exit
 
 PRODUCTION = 0  # If set to 1 Chronos will perform former logout command.
 
-DEFAULT_TIME = 5800  # Time pass before Chronos perform logout.
+USER = 'afanasiy'  # Account for which Chronos should perform logout command.
+
+DEFAULT_TIME = 5800  # Time in seconds pass before Chronos perform logout.
 
 STORAGE = os.path.expanduser('~') + '/chronos/storage.json'
 
-CURRENT_DATE = time.strftime("%d%m%Y", time.localtime()) 
-
-USER = 'afanasiy'
+CURRENT_DATE = time.strftime("%d%m%Y", time.localtime())
 
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
 
 class Storage():
     def __init__(self):
-        if not os.path.exists(STORAGE) or os.stat(STORAGE).st_size == 0:   
+        if not os.path.exists(STORAGE) or os.stat(STORAGE).st_size == 0:
             self.time_remain, self.last_date = DEFAULT_TIME, CURRENT_DATE
             self.save(self.time_remain, self.last_date)
         else:
@@ -45,7 +45,6 @@ class Timer:
     def run(self):
         if self.remain > 0:
             self.remain -= 1
-            print(self.remain)
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
                 self.save(self.remain, CURRENT_DATE)
             time.sleep(1 if PRODUCTION else 0)
