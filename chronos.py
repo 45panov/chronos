@@ -52,12 +52,12 @@ class Timer:
         return self.remain
 
 
-# Main part starts here.
-storage = Storage()
-timer = Timer(storage)
-while timer:
-    timer.run()
-if not PRODUCTION and not timer:
-    print("Chronos finished its job in test mode")
-    exit()
-os.system(f"{LOGOUT_COMMANDS[os.name]}")
+if __name__ == "__main__":
+    storage = Storage()
+    timer = Timer(storage)
+    while timer:
+        timer.run()
+    if not PRODUCTION and not timer:
+        print("Chronos finished its job in test mode")
+        exit()
+    os.system(f"{LOGOUT_COMMANDS[os.name]}")
