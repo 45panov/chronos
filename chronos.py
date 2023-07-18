@@ -40,6 +40,7 @@ class Timer:
     def __init__(self, storage: Storage):
         if storage.last_date != CURRENT_DATE:
             storage.save(DEFAULT_TIME, CURRENT_DATE)
+            storage.__init__()
         self.remain = storage.time_remain
         self.save = storage.save
 

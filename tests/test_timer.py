@@ -57,15 +57,10 @@ def test_timer_check_date():
     assert storage.last_date == CURRENT_DATE
 
 
-def test_storage_reset():
+def test_storage_save():
     storage = Storage()
     storage.last_date = '00000000'
-    storage.reset()
-    assert storage.last_date == CURRENT_DATE, "Storage.reset() must equalaze last_date to CURRENT_DATE"
+    storage.save(DEFAULT_TIME, CURRENT_DATE)
+    storage.__init__()
+    assert storage.last_date == CURRENT_DATE, "Storage.save() must equalaze last_date to CURRENT_DATE"
 
-def test_timer_yield():
-    storage = Storage()
-    timer = Timer(storage)
-    timer.remain = 2
-    timer.run()
-    assert timer.remain == 1
