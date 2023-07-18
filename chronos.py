@@ -1,21 +1,21 @@
 import json
-import time
 import os
+from time import sleep
+from datetime import date
 from sys import exit
 from tempfile import gettempdir
 
-
-PRODUCTION = 0  # If set to 1 Chronos will perform former logout command.
+PRODUCTION = False  # If set True Chronos will perform former logout command.
 
 USER = 'afanasiy'  # Account for which Chronos should perform logout command.
 
 DEFAULT_TIME = 5800  # Time in seconds pass before Chronos perform logout.
 
 STORAGE = {'posix': '/var/tmp/storage.json',
-           'nt': gettempdir()+'\\storage.json'
+           'nt': gettempdir() + '\\storage.json'
            }.get(os.name)
 
-CURRENT_DATE = time.strftime("%d%m%Y", time.localtime())
+CURRENT_DATE = str(date.today())
 
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
@@ -52,7 +52,7 @@ class Timer:
             self.remain -= 1
             if self.remain % 10 == 0:  # Save timer state every 10 seconds
                 self.save(self.remain, CURRENT_DATE)
-            time.sleep(1 if PRODUCTION else 0)
+            sleep(1 if PRODUCTION else 0)
             return self.remain
         return self.remain
 

@@ -1,15 +1,23 @@
-#chronos 0.1
+#CHORNOS 0.2
 
-chronos.py is script to limit my children playinig PC games.
+Chronos is pyton-script to limit my children playinig PC games.
 
-chronos.py performes logout from default_user  when time, defined in default_time, has expired.
+It performes logout from USER when time defined in DEFAULT_TIME expires. You can set it up in chronos.py directly. 
 
-It creates date_time.json to store current date and remaining time.
+To keep current date and remaining time Chronos creates storage.json in '/var/tmp/' in Linux and something like 
+'C:\Users\%USER%\Appdata\Local\Temp\' in Windows. To add or reduce remaining time you can edit corresponding variable 
+in storage.json. 
 
-It's created under Linix Mint 19.3 and python ver 3.6
+Tested on Linix Mint 19.3 and Windows 10 with Python 3.6.8. 
 
-To provide chronos execution on system login  the following command should be added to /home/.profile of corresponding user:
+## INSTALLATION
 
-python3 /home/USERNAME/chronos.py &
+Copy chronos.py to directry from which it may be executed under target account.
+Make chronos.py run on system start under target account. In Linux you should add following line in target user's .profile:
+
+_python ~/chronos/chronos.py_
+
+Set up USER, DEFAULT_TIME and switch PRODUCTION to True in chronos.py.
+
 
 
