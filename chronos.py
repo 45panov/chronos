@@ -1,63 +1,64 @@
-import json
 import time
 import os
+import pickle
 from sys import exit
+from typing import Protocol
 
-PRODUCTION = 0  # If set to 1 Chronos will perform former logout command.
+PRODUCTION = False  # If set to 1 Chronos will perform former logout command.
 
-USER = 'afanasiy'  # Account for which Chronos should perform logout command.
+USER = "afanasiy"  # Account for which Chronos should perform logout command.
 
 DEFAULT_TIME = 5800  # Time in seconds pass before Chronos perform logout.
 
-STORAGE = os.path.expanduser('~') + '/chronos/storage.json'
-
-CURRENT_DATE = time.strftime("%d%m%Y", time.localtime())
+STORAGE_FILE_PATH = os.path.expanduser("~") + "/chronos/storage.pkl"
 
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
 
-class Storage():
-    def __init__(self):
-        if not os.path.exists(STORAGE) or os.stat(STORAGE).st_size == 0:
-            self.time_remain, self.last_date = DEFAULT_TIME, CURRENT_DATE
-            self.save(self.time_remain, self.last_date)
-        else:
-            with open(STORAGE, mode='r', encoding='utf-8') as f:
-                self.time_remain, self.last_date = json.load(f).values()
+class SecondsStorageProtocol(Protocol):
+    def load(self) -> int:
+        ...
 
-    def save(self, time_value: int, date_value: str) -> None:
-        """Takes time and date values and loads it to storage.json"""
-        with open(STORAGE, mode='w', encoding='utf-8') as f:
-            json.dump({"time_remain": time_value, "last_date": date_value}, f)
-            f.flush()
+    def save(self, seconds: int) -> None:
+        ...
+
+
+class SecondsStorage(SecondsStorageProtocol):
+    def __init__(self, file_path: str, default_value=DEFAULT_TIME):
+        self._file_path = file_path
+        self._default_value = default_value
+
+    def save(self, seconds: int) -> None:
+        with open(self._file_path, "wb") as file:
+            pickle.dump(seconds, file)
+
+    def load(self) -> int:
+        if not os.path.exists(self._file_path) or os.stat(self._file_path).st_size == 0:
+            return self._default_value
+
+        with open(self._file_path, "rb") as file:
+            result = pickle.load(file)
+        return result
 
 
 class Timer:
-    def __init__(self, storage: Storage):
-        if storage.last_date != CURRENT_DATE:
-            storage.save(DEFAULT_TIME, CURRENT_DATE)
-        self.remain = storage.time_remain
-        self.save = storage.save
+    SECONDS_PER_ITERATION = 1
 
-    def __bool__(self):
-        return True if self.remain != 0 else False
+    def __init__(self, storage: SecondsStorageProtocol):
+        self._storage = storage
 
     def run(self):
-        if self.remain > 0:
-            self.remain -= 1
-            if self.remain % 10 == 0:  # Save timer state every 10 seconds
-                self.save(self.remain, CURRENT_DATE)
-            time.sleep(1 if PRODUCTION else 0)
-            return self.remain
-        return self.remain
+        seconds_left = self._storage.load()
+        while seconds_left > 0:
+            time.sleep(self.SECONDS_PER_ITERATION)
+            seconds_left -= self.SECONDS_PER_ITERATION
+            self._storage.save(seconds_left)
 
 
-# Main part starts here.
-storage = Storage()
-timer = Timer(storage)
-while timer:
+if __name__ == "__main__":
+    timer = Timer(storage=SecondsStorage(file_path=STORAGE_FILE_PATH))
     timer.run()
-if not PRODUCTION and not timer:
-    print('Chronos finished its job in test mode')
-    exit()
-os.system(f"{LOGOUT_COMMANDS[os.name]}")
+    if not PRODUCTION:
+        print("Chronos finished its job in test mode")
+        exit()
+    os.system(f"{LOGOUT_COMMANDS[os.name]}")
