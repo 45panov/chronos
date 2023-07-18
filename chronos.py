@@ -2,6 +2,8 @@ import json
 import time
 import os
 from sys import exit
+from tempfile import gettempdir
+
 
 PRODUCTION = 0  # If set to 1 Chronos will perform former logout command.
 
@@ -9,7 +11,9 @@ USER = 'afanasiy'  # Account for which Chronos should perform logout command.
 
 DEFAULT_TIME = 5800  # Time in seconds pass before Chronos perform logout.
 
-STORAGE = os.path.expanduser('~') + '/chronos/storage.json'
+STORAGE = {'posix': '/var/tmp/storage.json',
+           'nt': gettempdir()+'\\storage.json'
+           }.get(os.name)
 
 CURRENT_DATE = time.strftime("%d%m%Y", time.localtime())
 
@@ -53,11 +57,12 @@ class Timer:
 
 
 # Main part starts here.
-storage = Storage()
-timer = Timer(storage)
-while timer:
-    timer.run()
-if not PRODUCTION and not timer:
-    print('Chronos finished its job in test mode')
-    exit()
-os.system(f"{LOGOUT_COMMANDS[os.name]}")
+if __name__ == '__main__':
+    storage = Storage()
+    timer = Timer(storage)
+    while timer:
+        timer.run()
+    if not PRODUCTION and not timer:
+        print('Chronos finished its job in test mode')
+        exit()
+    os.system(f"{LOGOUT_COMMANDS[os.name]}")
