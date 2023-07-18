@@ -14,19 +14,19 @@ def test_storage():
 
 def test_no_storage_file():
     if os.name == 'posix':
-        os.system("rm -f " + Core.path_to_storage())
+        os.system("rm -f " + STORAGE)
         storage = Storage()
         assert storage.time_remain == DEFAULT_TIME
 
     if os.name == 'nt':
-        os.system("del " + Core.path_to_storage())
+        os.system("del " + STORAGE)
         storage = Storage()
         assert storage.time_remain == DEFAULT_TIME
 
 
 @pytest.mark.parametrize(
     'os_name, expected_storage_path', [
-        ('posix', os.getcwd() + os.sep + "storage.json"),
+        ('posix', '/var/tmp/storage.json'),
         ('nt', f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\Temp\\storage.json")
     ]
 )
@@ -38,8 +38,7 @@ def test_storage_path(os_name, expected_storage_path):
     """
 
     if os.name == os_name:
-        storage = Storage()
-        assert storage.path_to_storage() + os.sep + "storage.json" == expected_storage_path
+        assert STORAGE == expected_storage_path
 
 def test_get_date_from_storage():
     storage = Storage()

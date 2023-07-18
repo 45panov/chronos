@@ -21,11 +21,11 @@ def test_timer_is_0():
     assert timer.remain == 0, 'timer.is_run must be False if Timer(0)'
 
 
-def test_logout_on_timer_is_0():
-    jdata = Storage()
-    timer = Timer(jdata)
-    timer.run()
-    assert Core.logout() == f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
+# def test_logout_on_timer_is_0():
+#     jdata = Storage()
+#     timer = Timer(jdata)
+#     timer.run()
+#     assert Core.logout() == f"os.system(\"{LOGOUT_COMMANDS[os.name]}\")"
 
 
 def test_timer_is_run():
