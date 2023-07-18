@@ -20,7 +20,7 @@ CURRENT_DATE = str(date.today())
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
 
-class Storage():
+class Storage:
     def __init__(self):
         if not os.path.exists(STORAGE) or os.stat(STORAGE).st_size == 0:
             self.time_remain, self.last_date = DEFAULT_TIME, CURRENT_DATE
