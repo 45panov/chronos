@@ -9,7 +9,7 @@ PRODUCTION = False  # If set True Chronos will perform former logout command.
 
 USER = 'afanasiy'  # Account for which Chronos should perform logout command.
 
-SCHEDULE = False  # Set True if amount of time per day must differ in accordance to day of week.
+SCHEDULE = False  # Set True if amount of time per day must differ in accordance with day of week.
 
 # Time in seconds pass before Chronos perform logout.
 DEFAULT_TIME: int = 5800 if not SCHEDULE else {
@@ -20,7 +20,7 @@ DEFAULT_TIME: int = 5800 if not SCHEDULE else {
     'Friday': 0,
     'Saturday': 0,
     'Sunday': 0,
-}.get(datetime.today().strftime('%A'))   # Gets DEFAULT_TIME by the day of week.
+}.get(datetime.today().strftime('%A'))   # Gets DEFAULT_TIME by the day of week if SCHEDULE is set True above.
 
 STORAGE = {'posix': '/var/tmp/storage.json',
            'nt': gettempdir() + '\\storage.json'
