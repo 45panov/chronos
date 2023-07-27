@@ -1,7 +1,7 @@
 import json
 import os
 from time import sleep
-from datetime import date
+from datetime import date, datetime
 from sys import exit
 from tempfile import gettempdir
 
@@ -9,7 +9,18 @@ PRODUCTION = False  # If set True Chronos will perform former logout command.
 
 USER = 'afanasiy'  # Account for which Chronos should perform logout command.
 
-DEFAULT_TIME = 5800  # Time in seconds pass before Chronos perform logout.
+SCHEDULE = False  # Set True if amount of time per day must differ in accordance to day of week.
+
+# Time in seconds pass before Chronos perform logout.
+DEFAULT_TIME: int = 5800 if not SCHEDULE else {
+    'Monday': 0,
+    'Tuesday': 0,
+    'Wednesday': 0,
+    'Thursday': 0,
+    'Friday': 0,
+    'Saturday': 0,
+    'Sunday': 0,
+}.get(datetime.today().strftime('%A'))   # Gets DEFAULT_TIME by the day of week.
 
 STORAGE = {'posix': '/var/tmp/storage.json',
            'nt': gettempdir() + '\\storage.json'
