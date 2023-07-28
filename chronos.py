@@ -11,12 +11,13 @@ USER = "afanasiy"  # Account for which Chronos should perform logout command.
 
 SCHEDULE = True  # Set True if amount of time per day must differ in accordance with day of week.
 
-# Time in seconds pass before Chronos perform logout.
+
 DEFAULT_TIME: int = (
-    5800
+    5800  # Set here time in seconds pass before Chronos perform logout or...
     if not SCHEDULE
     else {
-        "Monday": 0,
+        "Monday": 0,  # ...specify it for particular week day.
+
         "Tuesday": 0,
         "Wednesday": 0,
         "Thursday": 0,
