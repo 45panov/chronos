@@ -17,7 +17,6 @@ DEFAULT_TIME: int = (
     if not SCHEDULE
     else {
         "Monday": 0,  # ...specify it for particular week day.
-
         "Tuesday": 0,
         "Wednesday": 0,
         "Thursday": 0,
