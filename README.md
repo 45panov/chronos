@@ -1,4 +1,4 @@
-# CHRONOS 0.2
+# CHRONOS 0.3
 
 Chronos is pyton-script to limit my children playinig PC games.
 
@@ -11,15 +11,19 @@ in storage.json.
 
 Tested on Linix Mint 19.3 and Windows 10 with Python 3.6.8. 
 
+New in version 0.3. SCHEDULE option is implemented. If SCHEDULE is True, DEFAULT_TIME is being set in accordance with 
+time set for particular day of week. Othewise DEFAULT_TIME is same for any day.
+
 ### INSTALLATION
 
-Clone repo of copy chronos.py to directoty from which it may be executed under target account.
-Make chronos.py run on system start under target account. For example in Linux you may add following
-line in target user's .profile:
+Clone repo or copy chronos.py to directoty from which it may be executed under target account.
+Make chronos.py run on system start under target USER account. For example in Linux you may add following
+line in target USER's .profile:
 
 _python ~/chronos/chronos.py_
 
-Set up USER, DEFAULT_TIME and switch PRODUCTION to True in chronos.py. Reboot and login USER account.
+Set up USER, DEFAULT_TIME (SCHEDULE if neccessery) and switch PRODUCTION to True in chronos.py. Reboot and login USER
+account.
 
 
 
