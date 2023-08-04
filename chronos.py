@@ -26,7 +26,7 @@ DEFAULT_TIME: int = (
     }.get(datetime.today().strftime("%A"))
 )  # Gets DEFAULT_TIME by the day of week if SCHEDULE is set True above.
 
-STORAGE = {"posix": "/var/tmp/storage.json", "nt": gettempdir() + "\\storage.json"}.get(
+STORAGE = {"posix": "/var/tmp/storage_"+USER+".json", "nt": gettempdir() + "\\storage.json"}.get(
     os.name
 )
 
