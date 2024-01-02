@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "chronos"
+version = "0.3"
+description = "Limits my children using PC."
+authors = ["45panov <khorkov.anton@gmail.com>"]
+license = "mit"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.6.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
