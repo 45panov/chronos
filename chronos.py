@@ -43,7 +43,7 @@ LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
 # Checks if login time is in allowwed TIME_RANGE.
 def is_now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
-    now_time = now_time or datetime.utcnow().time()
+    now_time = now_time or datetime.now().time()
     # Convert string values into datetime.time format
     start_time = time(*list(map(int, start_time.split(':'))))
     end_time = time(*list(map(int, end_time.split(':'))))
