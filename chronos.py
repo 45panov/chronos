@@ -1,9 +1,12 @@
 import json
 import os
 from time import sleep
-from datetime import date, datetime
+from datetime import date, datetime, time
 from sys import exit
 from tempfile import gettempdir
+
+
+#----------CONFIGURATION SECTION----------
 
 PRODUCTION = False  # If set True Chronos will perform former logout command.
 
@@ -11,6 +14,7 @@ USER = "afanasiy"  # Account for which Chronos should perform logout command.
 
 SCHEDULE = True  # Set True if amount of time per day must differ in accordance with day of week.
 
+TIME_RANGE = ('09:00', '22:00')  # USER is allowed to login within this time range. 
 
 DEFAULT_TIME: int = (
     5800  # Set here time in seconds pass before Chronos perform logout or...
@@ -34,6 +38,16 @@ CURRENT_DATE = str(date.today())
 
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
+
+#----------LOGIC SECTION----------
+
+# Checks if login time is in allowwed TIME_RANGE.
+def is_now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
+    now_time = now_time or datetime.utcnow().time()
+    # Convert string values into datetime.time format
+    start_time = time(*list(map(int, start_time.split(':'))))
+    end_time = time(*list(map(int, end_time.split(':'))))
+    return now_time >= start_time and now_time <= end_time
 
 class Storage:
     def __init__(self):
@@ -72,8 +86,11 @@ class Timer:
         return self.remain
 
 
-# Main part starts here.
+#----------MAIN SECTION---------- 
+
 if __name__ == "__main__":
+    if PRODUCTION and not is_now_in_time_range(*TIME_RANGE):
+        os.system(f"{LOGOUT_COMMANDS[os.name]}")
     storage = Storage()
     timer = Timer(storage)
     while timer:
