@@ -20,6 +20,6 @@ def test_time_range_elements_are_strings():
      (time(23,00), False)]
     
 )
-def test_is_now_in_time_range(now_time_samples, expected_result):
-    a = is_now_in_time_range(*TIME_RANGE, now_time_samples) 
+def test_now_in_time_range(now_time_samples, expected_result):
+    a = now_in_time_range(*TIME_RANGE, now_time_samples) 
     assert a == expected_result, f"Result is {a}. Expected {expected_result}"

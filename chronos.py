@@ -42,7 +42,7 @@ LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 #----------LOGIC SECTION----------
 
 # Checks if login time is in allowwed TIME_RANGE.
-def is_now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
+def now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
     now_time = now_time or datetime.now().time()
     # Convert string values into datetime.time format
     start_time = time(*list(map(int, start_time.split(':'))))
@@ -89,7 +89,7 @@ class Timer:
 #----------MAIN SECTION---------- 
 
 if __name__ == "__main__":
-    if PRODUCTION and not is_now_in_time_range(*TIME_RANGE):
+    if PRODUCTION and not now_in_time_range(*TIME_RANGE):
         os.system(f"{LOGOUT_COMMANDS[os.name]}")
     storage = Storage()
     timer = Timer(storage)
