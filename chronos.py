@@ -6,15 +6,18 @@ from sys import exit
 from tempfile import gettempdir
 
 
-#----------CONFIGURATION SECTION----------
+# ----------CONFIGURATION SECTION----------
 
 PRODUCTION = False  # If set True Chronos will perform former logout command.
 
 USER = "afanasiy"  # Account for which Chronos should perform logout command.
 
-SCHEDULE = True  # Set True if amount of time per day must differ in accordance with day of week.
+# Set True if amount of time per day must differ in accordance with day of
+# week.
+SCHEDULE = True
 
-TIME_RANGE = ('09:00', '22:00')  # USER is allowed to login within this time range. 
+# USER is allowed to login within this time range.
+TIME_RANGE = ('09:00', '22:00')
 
 DEFAULT_TIME: int = (
     5800  # Set here time in seconds pass before Chronos perform logout or...
@@ -30,16 +33,15 @@ DEFAULT_TIME: int = (
     }.get(datetime.today().strftime("%A"))
 )  # Gets DEFAULT_TIME by the day of week if SCHEDULE is set True above.
 
-STORAGE = {"posix": "/var/tmp/storage_"+USER+".json", "nt": gettempdir() + "\\storage.json"}.get(
-    os.name
-)
+STORAGE = {"posix": "/var/tmp/storage_" + USER + ".json",
+           "nt": gettempdir() + "\\storage.json"}.get(os.name)
 
 CURRENT_DATE = str(date.today())
 
 LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 
 
-#----------LOGIC SECTION----------
+# ----------LOGIC SECTION----------
 
 # Checks if login time is in allowwed TIME_RANGE.
 def now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
@@ -48,6 +50,7 @@ def now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
     start_time = time(*list(map(int, start_time.split(':'))))
     end_time = time(*list(map(int, end_time.split(':'))))
     return now_time >= start_time and now_time <= end_time
+
 
 class Storage:
     def __init__(self):
@@ -86,7 +89,7 @@ class Timer:
         return self.remain
 
 
-#----------MAIN SECTION---------- 
+# ----------MAIN SECTION----------
 
 if __name__ == "__main__":
     if PRODUCTION and not now_in_time_range(*TIME_RANGE):
