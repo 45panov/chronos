@@ -47,9 +47,10 @@ LOGOUT_COMMANDS = {"posix": "pkill -kill -u " + USER, "nt": "shutdown -l"}
 def now_in_time_range(start_time: str, end_time: str, now_time=None) -> bool:
     now_time = now_time or datetime.now().time()
     # Convert string values into datetime.time format
-    start_time = time(*list(map(int, start_time.split(':'))))
-    end_time = time(*list(map(int, end_time.split(':'))))
-    return now_time >= start_time and now_time <= end_time
+    tmp = [start_time, end_time]
+    for index, value in enumerate(tmp):
+        tmp[index] = time(*list(map(int, value.split(':'))))
+    return now_time >= tmp[0] and now_time <= tmp[1]
 
 
 class Storage:
